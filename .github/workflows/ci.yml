@@ -13,6 +13,5 @@ jobs:
       uses: coq-community/docker-coq-action@v1
       with:
         coq_version: 'latest'
-        # opam exec wraps the command with the correct environment variables and PATH
         script: |
-          opam exec -- coqc hello.v
+          /home/rocq/.opam/4.14.2+flambda/bin/coqc hello.v

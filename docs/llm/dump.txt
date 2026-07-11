@@ -7,7 +7,7 @@
 
 DUMP METADATA
 ═════════════════════════════════════════════════════════════════════════════════
-  Generated at   : 2026-07-11T02:05:56-04:00
+  Generated at   : 2026-07-11T02:14:23-04:00
   Generator      : export.sh
   Host           : fedora
   User           : kushal
@@ -17,10 +17,10 @@ REPOSITORY METADATA
 ═════════════════════════════════════════════════════════════════════════════════
   Repository root: /home/kushal/src/mycoq/hellocoq
   Branch         : main
-  Commit (full)  : d28959ae4f0e7e88be757768d08156b762a00c41
-  Commit (short) : d28959a
-  Commit date    : 2026-07-11 02:02:28 -0400
-  Commit message : run dump
+  Commit (full)  : ca99b1ec4b103a03c5458b0a16b94fda7d5a03a1
+  Commit (short) : ca99b1e
+  Commit date    : 2026-07-11 02:06:04 -0400
+  Commit message : use opam
   Remote origin  : git@github.com:kusl/hellocoq.git
   Files included : 5
   Excluded path  : docs/llm/
@@ -856,15 +856,15 @@ mv -f "$TMP_FILE" "$OUTPUT_FILE"
   File name:             ci.yml
   Relative path:         .github/workflows/ci.yml
   Absolute path:         /home/kushal/src/mycoq/hellocoq/.github/workflows/ci.yml
-  Size:                  427 B (427 bytes)
-  Last modified:         2026-07-11 02:05:51.053212204 -0400
+  Size:                  364 B (364 bytes)
+  Last modified:         2026-07-11 02:14:12.773364054 -0400
   Permissions:           -rw-r--r--
   Owner:                 kushal:kushal
   Inode:                 20561002
   Hard links:            1
   MIME type:             text/plain
-  SHA-256:               92b3e0cbf43ddb53d357610dd638c9ccb2dcee86b93dec8015de8dec205e18b4
-  Last git commit:       84e8554 2026-07-11 02:02:21 -0400 update script
+  SHA-256:               ce4c99d14c1d49f26aec2ef45c549fb13a727ec1e0395a4f5e4aff1026b41fc1
+  Last git commit:       ca99b1e 2026-07-11 02:06:04 -0400 use opam
 
 --- CONTENT ---
 name: Coq Proof Verification
@@ -882,9 +882,8 @@ jobs:
       uses: coq-community/docker-coq-action@v1
       with:
         coq_version: 'latest'
-        # opam exec wraps the command with the correct environment variables and PATH
         script: |
-          opam exec -- coqc hello.v
+          /home/rocq/.opam/4.14.2+flambda/bin/coqc hello.v
 
 
 ################################################################################
@@ -1021,9 +1020,9 @@ echo "========================================="
 # DUMP SUMMARY
 ################################################################################
   Files dumped   : 5
-  Total size     : 19.7 KiB (20225 bytes)
+  Total size     : 19.6 KiB (20162 bytes)
   Output file    : /home/kushal/src/mycoq/hellocoq/docs/llm/dump.txt
-  Completed at   : 2026-07-11T02:05:56-04:00
+  Completed at   : 2026-07-11T02:14:23-04:00
 ################################################################################
 # END OF DUMP
 ################################################################################
