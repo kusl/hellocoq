@@ -7,7 +7,7 @@
 
 DUMP METADATA
 ═════════════════════════════════════════════════════════════════════════════════
-  Generated at   : 2026-07-11T02:21:25-04:00
+  Generated at   : 2026-07-11T02:23:35-04:00
   Generator      : export.sh
   Host           : fedora
   User           : kushal
@@ -17,10 +17,10 @@ REPOSITORY METADATA
 ═════════════════════════════════════════════════════════════════════════════════
   Repository root: /home/kushal/src/mycoq/hellocoq
   Branch         : main
-  Commit (full)  : aa8a40590d241fac271a73dc9c311eb810fdd0d9
-  Commit (short) : aa8a405
-  Commit date    : 2026-07-11 02:19:13 -0400
-  Commit message : run dump
+  Commit (full)  : a6a8597449def56cf6a693248a4ddbfdf991a668
+  Commit (short) : a6a8597
+  Commit date    : 2026-07-11 02:21:35 -0400
+  Commit message : use podman
   Remote origin  : git@github.com:kusl/hellocoq.git
   Files included : 6
   Excluded path  : docs/llm/
@@ -28,9 +28,7 @@ REPOSITORY METADATA
 
 GIT WORKING TREE STATUS (first 20 lines)
 ═════════════════════════════════════════════════════════════════════════════════
- M .github/workflows/ci.yml
- M verify.sh
-?? run_podman.sh
+ M run_podman.sh
 
 ################################################################################
 # FILE: export.sh  [THIS SCRIPT — included for full context]
@@ -867,7 +865,7 @@ mv -f "$TMP_FILE" "$OUTPUT_FILE"
   Hard links:            1
   MIME type:             text/plain
   SHA-256:               70db80c538b303b873baefbbfda23e99bd6b908ca2f3456bf491aa6819c3e379
-  Last git commit:       62957bb 2026-07-11 02:14:33 -0400 update ci
+  Last git commit:       a6a8597 2026-07-11 02:21:35 -0400 use podman
 
 --- CONTENT ---
 name: Coq Proof Verification
@@ -981,15 +979,15 @@ Gemini assisted in:
   File name:             run_podman.sh
   Relative path:         run_podman.sh
   Absolute path:         /home/kushal/src/mycoq/hellocoq/run_podman.sh
-  Size:                  446 B (446 bytes)
-  Last modified:         2026-07-11 02:20:54.558304639 -0400
+  Size:                  662 B (662 bytes)
+  Last modified:         2026-07-11 02:23:31.326835064 -0400
   Permissions:           -rw-r--r--
   Owner:                 kushal:kushal
   Inode:                 20568601
   Hard links:            1
   MIME type:             text/x-shellscript
-  SHA-256:               95c3bbe199eb69b18c93fb4dcc22d0a0ee97859248263a62d13a7625e9ef421f
-  Last git commit:       
+  SHA-256:               6d437c8168a5f3c2e30ac5a7ca6e1972972d71cc7882f0f57b0a482aff5a72a8
+  Last git commit:       a6a8597 2026-07-11 02:21:35 -0400 use podman
 
 --- CONTENT ---
 #!/usr/bin/env bash
@@ -1002,13 +1000,16 @@ echo "🚀 Pulling latest Rocq image (if needed)..."
 podman pull $IMAGE
 
 echo "📦 Mounting current directory and running verification..."
-# We map the current dir to /workspace and run the script inside opam exec
+# 1. -e HOME=/home/rocq forces the environment back to the container's native user
+# 2. bash -l makes it a login shell so it inherits all container profiles
+# 3. opam exec --root=... strictly locks the package manager to the right directory
 podman run --rm \
   --security-opt label=disable \
+  -e HOME=/home/rocq \
   -v "$(pwd)":$WORKSPACE \
   -w $WORKSPACE \
   $IMAGE \
-  bash -c "opam exec -- bash verify.sh"
+  bash -l -c "opam exec --root=/home/rocq/.opam -- bash verify.sh"
 
 
 ################################################################################
@@ -1027,7 +1028,7 @@ podman run --rm \
   Hard links:            1
   MIME type:             text/x-shellscript
   SHA-256:               e52ca0b27518929a78eac20b10b495354c69fc053d3b049b0004f1f37d58066d
-  Last git commit:       8caba1a 2026-07-11 01:53:50 -0400 update verify.sh
+  Last git commit:       a6a8597 2026-07-11 02:21:35 -0400 use podman
 
 --- CONTENT ---
 #!/usr/bin/env bash
@@ -1056,9 +1057,9 @@ echo "========================================="
 # DUMP SUMMARY
 ################################################################################
   Files dumped   : 6
-  Total size     : 20.0 KiB (20492 bytes)
+  Total size     : 20.2 KiB (20708 bytes)
   Output file    : /home/kushal/src/mycoq/hellocoq/docs/llm/dump.txt
-  Completed at   : 2026-07-11T02:21:25-04:00
+  Completed at   : 2026-07-11T02:23:35-04:00
 ################################################################################
 # END OF DUMP
 ################################################################################
