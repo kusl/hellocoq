@@ -9,8 +9,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v7
 
-    - name: Run Verification Script via Coq Docker
+    - name: Compile Coq File
       uses: coq-community/docker-coq-action@v1
       with:
         coq_version: 'latest'
-        script: ./verify.sh
+        # This tells the runner to execute coqc directly inside the fully initialized environment
+        script: |
+          coqc hello.v
