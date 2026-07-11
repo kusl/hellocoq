@@ -7,7 +7,7 @@
 
 DUMP METADATA
 ═════════════════════════════════════════════════════════════════════════════════
-  Generated at   : 2026-07-11T01:56:55-04:00
+  Generated at   : 2026-07-11T01:58:51-04:00
   Generator      : export.sh
   Host           : fedora
   User           : kushal
@@ -17,10 +17,10 @@ REPOSITORY METADATA
 ═════════════════════════════════════════════════════════════════════════════════
   Repository root: /home/kushal/src/mycoq/hellocoq
   Branch         : main
-  Commit (full)  : 8caba1a52b08c08e91d7eebc61f6df08fbe095fb
-  Commit (short) : 8caba1a
-  Commit date    : 2026-07-11 01:53:50 -0400
-  Commit message : update verify.sh
+  Commit (full)  : 18bf012fb9e7fbac66f9bd68fa43e26c527aaac7
+  Commit (short) : 18bf012
+  Commit date    : 2026-07-11 01:58:41 -0400
+  Commit message : try a simpler approach
   Remote origin  : git@github.com:kusl/hellocoq.git
   Files included : 5
   Excluded path  : docs/llm/
@@ -856,15 +856,15 @@ mv -f "$TMP_FILE" "$OUTPUT_FILE"
   File name:             ci.yml
   Relative path:         .github/workflows/ci.yml
   Absolute path:         /home/kushal/src/mycoq/hellocoq/.github/workflows/ci.yml
-  Size:                  337 B (337 bytes)
-  Last modified:         2026-07-11 01:53:31.168317014 -0400
+  Size:                  426 B (426 bytes)
+  Last modified:         2026-07-11 01:58:21.858103300 -0400
   Permissions:           -rw-r--r--
   Owner:                 kushal:kushal
   Inode:                 20561002
   Hard links:            1
   MIME type:             text/plain
-  SHA-256:               8fab15fa93865e12b516fd7153f9b1d33927d39a40659fe7ddc07911ecc71a46
-  Last git commit:       8caba1a 2026-07-11 01:53:50 -0400 update verify.sh
+  SHA-256:               45d6ebd8b18f5ede3af5311c38e243e6ddc4479fc9ea4584ebfbae28138feca0
+  Last git commit:       18bf012 2026-07-11 01:58:41 -0400 try a simpler approach
 
 --- CONTENT ---
 name: Coq Proof Verification
@@ -878,11 +878,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v7
 
-    - name: Run Verification Script via Coq Docker
+    - name: Compile Coq File
       uses: coq-community/docker-coq-action@v1
       with:
         coq_version: 'latest'
-        script: ./verify.sh
+        # This tells the runner to execute coqc directly inside the fully initialized environment
+        script: |
+          coqc hello.v
 
 
 ################################################################################
@@ -1019,9 +1021,9 @@ echo "========================================="
 # DUMP SUMMARY
 ################################################################################
   Files dumped   : 5
-  Total size     : 19.6 KiB (20135 bytes)
+  Total size     : 19.7 KiB (20224 bytes)
   Output file    : /home/kushal/src/mycoq/hellocoq/docs/llm/dump.txt
-  Completed at   : 2026-07-11T01:56:55-04:00
+  Completed at   : 2026-07-11T01:58:51-04:00
 ################################################################################
 # END OF DUMP
 ################################################################################
