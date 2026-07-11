@@ -21,13 +21,14 @@ If you have Coq installed natively on your machine, simply make the script execu
 ```bash
 chmod +x verify.sh
 ./verify.sh
+```
 
-Option 2: Docker Mirror (Matches CI exactly)
+### Option 2: Docker Mirror (Matches CI exactly)
 
 If you don't have Coq installed locally, you can mirror the exact GitHub Actions execution environment using Docker:
-Bash
-
+```bash
 docker run --rm -v "$(pwd):/workspace" -w /workspace coqorg/coq:latest ./verify.sh
+```
 
 🤖 AI Disclosure & Collaboration
 
