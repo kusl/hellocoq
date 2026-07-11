@@ -1,0 +1,16 @@
+name: Coq Proof Verification
+
+on: [push, pull_request]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run Verification Script via Coq Docker
+      uses: coq-community/docker-coq-action@v1
+      with:
+        coq_version: 'latest'
+        custom_script: ./verify.sh
