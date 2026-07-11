@@ -7,7 +7,7 @@
 
 DUMP METADATA
 ═════════════════════════════════════════════════════════════════════════════════
-  Generated at   : 2026-07-11T02:19:04-04:00
+  Generated at   : 2026-07-11T02:21:25-04:00
   Generator      : export.sh
   Host           : fedora
   User           : kushal
@@ -17,18 +17,20 @@ REPOSITORY METADATA
 ═════════════════════════════════════════════════════════════════════════════════
   Repository root: /home/kushal/src/mycoq/hellocoq
   Branch         : main
-  Commit (full)  : 62957bb9950b960d1f8f2da01d05cf96b36d9240
-  Commit (short) : 62957bb
-  Commit date    : 2026-07-11 02:14:33 -0400
-  Commit message : update ci
+  Commit (full)  : aa8a40590d241fac271a73dc9c311eb810fdd0d9
+  Commit (short) : aa8a405
+  Commit date    : 2026-07-11 02:19:13 -0400
+  Commit message : run dump
   Remote origin  : git@github.com:kusl/hellocoq.git
-  Files included : 5
+  Files included : 6
   Excluded path  : docs/llm/
   Excluded files : yarn.lock, .pnp.cjs, .pnp.loader.mjs
 
 GIT WORKING TREE STATUS (first 20 lines)
 ═════════════════════════════════════════════════════════════════════════════════
-  (clean — no uncommitted changes)
+ M .github/workflows/ci.yml
+ M verify.sh
+?? run_podman.sh
 
 ################################################################################
 # FILE: export.sh  [THIS SCRIPT — included for full context]
@@ -430,7 +432,7 @@ FOOTER
 mv -f "$TMP_FILE" "$OUTPUT_FILE"
 
 ################################################################################
-# FILE TREE  (all 5 included files)
+# FILE TREE  (all 6 included files)
 ################################################################################
 .
 .
@@ -440,6 +442,7 @@ mv -f "$TMP_FILE" "$OUTPUT_FILE"
 │       └── ci.yml
 ├── hello.v
 ├── README.md
+├── run_podman.sh
 └── verify.sh
 
 
@@ -856,14 +859,14 @@ mv -f "$TMP_FILE" "$OUTPUT_FILE"
   File name:             ci.yml
   Relative path:         .github/workflows/ci.yml
   Absolute path:         /home/kushal/src/mycoq/hellocoq/.github/workflows/ci.yml
-  Size:                  364 B (364 bytes)
-  Last modified:         2026-07-11 02:14:12.773364054 -0400
+  Size:                  310 B (310 bytes)
+  Last modified:         2026-07-11 02:21:20.550844884 -0400
   Permissions:           -rw-r--r--
   Owner:                 kushal:kushal
   Inode:                 20561002
   Hard links:            1
   MIME type:             text/plain
-  SHA-256:               ce4c99d14c1d49f26aec2ef45c549fb13a727ec1e0395a4f5e4aff1026b41fc1
+  SHA-256:               70db80c538b303b873baefbbfda23e99bd6b908ca2f3456bf491aa6819c3e379
   Last git commit:       62957bb 2026-07-11 02:14:33 -0400 update ci
 
 --- CONTENT ---
@@ -876,14 +879,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
-    - name: Compile Coq File
-      uses: coq-community/docker-coq-action@v1
-      with:
-        coq_version: 'latest'
-        script: |
-          /home/rocq/.opam/4.14.2+flambda/bin/coqc hello.v
+    - name: Run verification in Podman/Docker
+      # The ubuntu-latest runner comes with podman pre-installed
+      run: bash run_podman.sh
 
 
 ################################################################################
@@ -974,6 +974,44 @@ Gemini assisted in:
 
 
 ################################################################################
+# FILE: run_podman.sh
+################################################################################
+
+--- METADATA ---
+  File name:             run_podman.sh
+  Relative path:         run_podman.sh
+  Absolute path:         /home/kushal/src/mycoq/hellocoq/run_podman.sh
+  Size:                  446 B (446 bytes)
+  Last modified:         2026-07-11 02:20:54.558304639 -0400
+  Permissions:           -rw-r--r--
+  Owner:                 kushal:kushal
+  Inode:                 20568601
+  Hard links:            1
+  MIME type:             text/x-shellscript
+  SHA-256:               95c3bbe199eb69b18c93fb4dcc22d0a0ee97859248263a62d13a7625e9ef421f
+  Last git commit:       
+
+--- CONTENT ---
+#!/usr/bin/env bash
+set -e
+
+IMAGE="rocq/rocq-prover:latest"
+WORKSPACE="/workspace"
+
+echo "🚀 Pulling latest Rocq image (if needed)..."
+podman pull $IMAGE
+
+echo "📦 Mounting current directory and running verification..."
+# We map the current dir to /workspace and run the script inside opam exec
+podman run --rm \
+  --security-opt label=disable \
+  -v "$(pwd)":$WORKSPACE \
+  -w $WORKSPACE \
+  $IMAGE \
+  bash -c "opam exec -- bash verify.sh"
+
+
+################################################################################
 # FILE: verify.sh
 ################################################################################
 
@@ -981,20 +1019,18 @@ Gemini assisted in:
   File name:             verify.sh
   Relative path:         verify.sh
   Absolute path:         /home/kushal/src/mycoq/hellocoq/verify.sh
-  Size:                  610 B (610 bytes)
-  Last modified:         2026-07-11 01:53:40.784379402 -0400
+  Size:                  548 B (548 bytes)
+  Last modified:         2026-07-11 02:20:28.045194399 -0400
   Permissions:           -rwxr-xr-x
   Owner:                 kushal:kushal
   Inode:                 20560957
   Hard links:            1
   MIME type:             text/x-shellscript
-  SHA-256:               64be76215ee497370d7e96808fe0c66822ecd6a7c0fbef011c2e7bad8ec74e99
+  SHA-256:               e52ca0b27518929a78eac20b10b495354c69fc053d3b049b0004f1f37d58066d
   Last git commit:       8caba1a 2026-07-11 01:53:50 -0400 update verify.sh
 
 --- CONTENT ---
 #!/usr/bin/env bash
-
-# Exit immediately if a command exits with a non-zero status
 set -e
 
 echo "========================================="
@@ -1019,10 +1055,10 @@ echo "========================================="
 ################################################################################
 # DUMP SUMMARY
 ################################################################################
-  Files dumped   : 5
-  Total size     : 19.6 KiB (20162 bytes)
+  Files dumped   : 6
+  Total size     : 20.0 KiB (20492 bytes)
   Output file    : /home/kushal/src/mycoq/hellocoq/docs/llm/dump.txt
-  Completed at   : 2026-07-11T02:19:04-04:00
+  Completed at   : 2026-07-11T02:21:25-04:00
 ################################################################################
 # END OF DUMP
 ################################################################################

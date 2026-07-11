@@ -7,11 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
-    - name: Compile Coq File
-      uses: coq-community/docker-coq-action@v1
-      with:
-        coq_version: 'latest'
-        script: |
-          /home/rocq/.opam/4.14.2+flambda/bin/coqc hello.v
+    - name: Run verification in Podman/Docker
+      # The ubuntu-latest runner comes with podman pre-installed
+      run: bash run_podman.sh
