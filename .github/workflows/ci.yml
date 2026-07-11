@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@7
 
     - name: Run Verification Script via Coq Docker
       uses: coq-community/docker-coq-action@v1
