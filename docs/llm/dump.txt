@@ -7,7 +7,7 @@
 
 DUMP METADATA
 ═════════════════════════════════════════════════════════════════════════════════
-  Generated at   : 2026-07-11T02:02:23-04:00
+  Generated at   : 2026-07-11T02:05:56-04:00
   Generator      : export.sh
   Host           : fedora
   User           : kushal
@@ -17,10 +17,10 @@ REPOSITORY METADATA
 ═════════════════════════════════════════════════════════════════════════════════
   Repository root: /home/kushal/src/mycoq/hellocoq
   Branch         : main
-  Commit (full)  : 84e855478d7b6efe00fb1f49ab4093e611af3121
-  Commit (short) : 84e8554
-  Commit date    : 2026-07-11 02:02:21 -0400
-  Commit message : update script
+  Commit (full)  : d28959ae4f0e7e88be757768d08156b762a00c41
+  Commit (short) : d28959a
+  Commit date    : 2026-07-11 02:02:28 -0400
+  Commit message : run dump
   Remote origin  : git@github.com:kusl/hellocoq.git
   Files included : 5
   Excluded path  : docs/llm/
@@ -28,7 +28,7 @@ REPOSITORY METADATA
 
 GIT WORKING TREE STATUS (first 20 lines)
 ═════════════════════════════════════════════════════════════════════════════════
-  (clean — no uncommitted changes)
+ M .github/workflows/ci.yml
 
 ################################################################################
 # FILE: export.sh  [THIS SCRIPT — included for full context]
@@ -856,14 +856,14 @@ mv -f "$TMP_FILE" "$OUTPUT_FILE"
   File name:             ci.yml
   Relative path:         .github/workflows/ci.yml
   Absolute path:         /home/kushal/src/mycoq/hellocoq/.github/workflows/ci.yml
-  Size:                  329 B (329 bytes)
-  Last modified:         2026-07-11 02:02:14.564779000 -0400
+  Size:                  427 B (427 bytes)
+  Last modified:         2026-07-11 02:05:51.053212204 -0400
   Permissions:           -rw-r--r--
   Owner:                 kushal:kushal
   Inode:                 20561002
   Hard links:            1
   MIME type:             text/plain
-  SHA-256:               c33388e83a3b564538aa29a7960d0371e0d13304d16f8588cfbc39940eef6d48
+  SHA-256:               92b3e0cbf43ddb53d357610dd638c9ccb2dcee86b93dec8015de8dec205e18b4
   Last git commit:       84e8554 2026-07-11 02:02:21 -0400 update script
 
 --- CONTENT ---
@@ -882,8 +882,9 @@ jobs:
       uses: coq-community/docker-coq-action@v1
       with:
         coq_version: 'latest'
+        # opam exec wraps the command with the correct environment variables and PATH
         script: |
-          rocqc hello.v
+          opam exec -- coqc hello.v
 
 
 ################################################################################
@@ -1020,9 +1021,9 @@ echo "========================================="
 # DUMP SUMMARY
 ################################################################################
   Files dumped   : 5
-  Total size     : 19.6 KiB (20127 bytes)
+  Total size     : 19.7 KiB (20225 bytes)
   Output file    : /home/kushal/src/mycoq/hellocoq/docs/llm/dump.txt
-  Completed at   : 2026-07-11T02:02:23-04:00
+  Completed at   : 2026-07-11T02:05:56-04:00
 ################################################################################
 # END OF DUMP
 ################################################################################
