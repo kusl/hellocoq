@@ -13,4 +13,4 @@ jobs:
       uses: coq-community/docker-coq-action@v1
       with:
         coq_version: 'latest'
-        custom_script: ./verify.sh
+        script: ./verify.sh

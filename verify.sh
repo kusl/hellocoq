@@ -3,11 +3,6 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# 💡 FIX: Initialize the opam environment inside the script context
-if command -v opam &> /dev/null; then
-    eval $(opam env)
-fi
-
 echo "========================================="
 echo " Starting Coq Proof Verification..."
 echo "========================================="
