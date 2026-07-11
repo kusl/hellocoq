@@ -7,7 +7,7 @@
 
 DUMP METADATA
 ═════════════════════════════════════════════════════════════════════════════════
-  Generated at   : 2026-07-11T02:14:23-04:00
+  Generated at   : 2026-07-11T02:19:04-04:00
   Generator      : export.sh
   Host           : fedora
   User           : kushal
@@ -17,10 +17,10 @@ REPOSITORY METADATA
 ═════════════════════════════════════════════════════════════════════════════════
   Repository root: /home/kushal/src/mycoq/hellocoq
   Branch         : main
-  Commit (full)  : ca99b1ec4b103a03c5458b0a16b94fda7d5a03a1
-  Commit (short) : ca99b1e
-  Commit date    : 2026-07-11 02:06:04 -0400
-  Commit message : use opam
+  Commit (full)  : 62957bb9950b960d1f8f2da01d05cf96b36d9240
+  Commit (short) : 62957bb
+  Commit date    : 2026-07-11 02:14:33 -0400
+  Commit message : update ci
   Remote origin  : git@github.com:kusl/hellocoq.git
   Files included : 5
   Excluded path  : docs/llm/
@@ -28,7 +28,7 @@ REPOSITORY METADATA
 
 GIT WORKING TREE STATUS (first 20 lines)
 ═════════════════════════════════════════════════════════════════════════════════
- M .github/workflows/ci.yml
+  (clean — no uncommitted changes)
 
 ################################################################################
 # FILE: export.sh  [THIS SCRIPT — included for full context]
@@ -864,7 +864,7 @@ mv -f "$TMP_FILE" "$OUTPUT_FILE"
   Hard links:            1
   MIME type:             text/plain
   SHA-256:               ce4c99d14c1d49f26aec2ef45c549fb13a727ec1e0395a4f5e4aff1026b41fc1
-  Last git commit:       ca99b1e 2026-07-11 02:06:04 -0400 use opam
+  Last git commit:       62957bb 2026-07-11 02:14:33 -0400 update ci
 
 --- CONTENT ---
 name: Coq Proof Verification
@@ -1022,7 +1022,7 @@ echo "========================================="
   Files dumped   : 5
   Total size     : 19.6 KiB (20162 bytes)
   Output file    : /home/kushal/src/mycoq/hellocoq/docs/llm/dump.txt
-  Completed at   : 2026-07-11T02:14:23-04:00
+  Completed at   : 2026-07-11T02:19:04-04:00
 ################################################################################
 # END OF DUMP
 ################################################################################
