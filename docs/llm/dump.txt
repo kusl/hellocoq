@@ -7,7 +7,7 @@
 
 DUMP METADATA
 ═════════════════════════════════════════════════════════════════════════════════
-  Generated at   : 2026-07-11T02:23:35-04:00
+  Generated at   : 2026-07-11T02:28:39-04:00
   Generator      : export.sh
   Host           : fedora
   User           : kushal
@@ -17,10 +17,10 @@ REPOSITORY METADATA
 ═════════════════════════════════════════════════════════════════════════════════
   Repository root: /home/kushal/src/mycoq/hellocoq
   Branch         : main
-  Commit (full)  : a6a8597449def56cf6a693248a4ddbfdf991a668
-  Commit (short) : a6a8597
-  Commit date    : 2026-07-11 02:21:35 -0400
-  Commit message : use podman
+  Commit (full)  : adf9b2a55c926175e254140ed58ee89be0b6f8e2
+  Commit (short) : adf9b2a
+  Commit date    : 2026-07-11 02:23:41 -0400
+  Commit message : update script
   Remote origin  : git@github.com:kusl/hellocoq.git
   Files included : 6
   Excluded path  : docs/llm/
@@ -29,6 +29,7 @@ REPOSITORY METADATA
 GIT WORKING TREE STATUS (first 20 lines)
 ═════════════════════════════════════════════════════════════════════════════════
  M run_podman.sh
+ M verify.sh
 
 ################################################################################
 # FILE: export.sh  [THIS SCRIPT — included for full context]
@@ -979,15 +980,15 @@ Gemini assisted in:
   File name:             run_podman.sh
   Relative path:         run_podman.sh
   Absolute path:         /home/kushal/src/mycoq/hellocoq/run_podman.sh
-  Size:                  662 B (662 bytes)
-  Last modified:         2026-07-11 02:23:31.326835064 -0400
+  Size:                  348 B (348 bytes)
+  Last modified:         2026-07-11 02:28:30.214397927 -0400
   Permissions:           -rw-r--r--
   Owner:                 kushal:kushal
   Inode:                 20568601
   Hard links:            1
   MIME type:             text/x-shellscript
-  SHA-256:               6d437c8168a5f3c2e30ac5a7ca6e1972972d71cc7882f0f57b0a482aff5a72a8
-  Last git commit:       a6a8597 2026-07-11 02:21:35 -0400 use podman
+  SHA-256:               5db4dc8ed17ac8e32fe67d019ce40f89efd6eec3095ff26e2ddf943f15b22a94
+  Last git commit:       adf9b2a 2026-07-11 02:23:41 -0400 update script
 
 --- CONTENT ---
 #!/usr/bin/env bash
@@ -1000,16 +1001,12 @@ echo "🚀 Pulling latest Rocq image (if needed)..."
 podman pull $IMAGE
 
 echo "📦 Mounting current directory and running verification..."
-# 1. -e HOME=/home/rocq forces the environment back to the container's native user
-# 2. bash -l makes it a login shell so it inherits all container profiles
-# 3. opam exec --root=... strictly locks the package manager to the right directory
 podman run --rm \
   --security-opt label=disable \
-  -e HOME=/home/rocq \
   -v "$(pwd)":$WORKSPACE \
   -w $WORKSPACE \
   $IMAGE \
-  bash -l -c "opam exec --root=/home/rocq/.opam -- bash verify.sh"
+  bash verify.sh
 
 
 ################################################################################
@@ -1020,14 +1017,14 @@ podman run --rm \
   File name:             verify.sh
   Relative path:         verify.sh
   Absolute path:         /home/kushal/src/mycoq/hellocoq/verify.sh
-  Size:                  548 B (548 bytes)
-  Last modified:         2026-07-11 02:20:28.045194399 -0400
+  Size:                  879 B (879 bytes)
+  Last modified:         2026-07-11 02:28:16.620001734 -0400
   Permissions:           -rwxr-xr-x
   Owner:                 kushal:kushal
   Inode:                 20560957
   Hard links:            1
   MIME type:             text/x-shellscript
-  SHA-256:               e52ca0b27518929a78eac20b10b495354c69fc053d3b049b0004f1f37d58066d
+  SHA-256:               7de1bd2298f99980150cfdcfd6646e8083d4645b884d0e3fa3b1925355292e17
   Last git commit:       a6a8597 2026-07-11 02:21:35 -0400 use podman
 
 --- CONTENT ---
@@ -1038,9 +1035,18 @@ echo "========================================="
 echo " Starting Coq Proof Verification..."
 echo "========================================="
 
+# 💡 FIX: Manually find and inject the container's compiler paths into $PATH
+# This bypasses opam's user/root restrictions completely
+for opam_bin in /home/rocq/.opam/*/bin /home/rocq/.opam/*/*/bin; do
+    if [ -d "$opam_bin" ]; then
+        export PATH="$opam_bin:$PATH"
+    fi
+done
+
 # 1. Check if coqc is available
 if ! command -v coqc &> /dev/null; then
     echo "Error: coqc (Coq Compiler) is not installed or not in your PATH."
+    echo "Current PATH search space: $PATH"
     exit 1
 fi
 
@@ -1057,9 +1063,9 @@ echo "========================================="
 # DUMP SUMMARY
 ################################################################################
   Files dumped   : 6
-  Total size     : 20.2 KiB (20708 bytes)
+  Total size     : 20.2 KiB (20725 bytes)
   Output file    : /home/kushal/src/mycoq/hellocoq/docs/llm/dump.txt
-  Completed at   : 2026-07-11T02:23:35-04:00
+  Completed at   : 2026-07-11T02:28:39-04:00
 ################################################################################
 # END OF DUMP
 ################################################################################
