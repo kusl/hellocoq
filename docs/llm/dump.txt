@@ -7,7 +7,7 @@
 
 DUMP METADATA
 ═════════════════════════════════════════════════════════════════════════════════
-  Generated at   : 2026-08-06T10:29:09-04:00
+  Generated at   : 2026-08-06T10:29:24-04:00
   Generator      : export.sh
   Host           : fedora
   User           : kushal
@@ -17,10 +17,10 @@ REPOSITORY METADATA
 ═════════════════════════════════════════════════════════════════════════════════
   Repository root: /home/kushal/src/mycoq/hellocoq
   Branch         : main
-  Commit (full)  : 5f2adc60409508a435c255e4b9f828e1c9d9d26c
-  Commit (short) : 5f2adc6
-  Commit date    : 2026-08-06 10:09:49 -0400
-  Commit message : run dump
+  Commit (full)  : 94c97e75fb286b4299ba4b6bfa0c61cb1d412f8b
+  Commit (short) : 94c97e7
+  Commit date    : 2026-08-06 10:29:20 -0400
+  Commit message : add claude changes
   Remote origin  : git@github.com:kusl/hellocoq.git
   Files included : 7
   Excluded path  : docs/llm/
@@ -28,11 +28,7 @@ REPOSITORY METADATA
 
 GIT WORKING TREE STATUS (first 20 lines)
 ═════════════════════════════════════════════════════════════════════════════════
- M .github/workflows/ci.yml
- M README.md
- M verify.sh
-?? docs/llm/vendor/
-?? gitignore
+  (clean — no uncommitted changes)
 
 ################################################################################
 # FILE: export.sh  [THIS SCRIPT — included for full context]
@@ -870,7 +866,7 @@ mv -f "$TMP_FILE" "$OUTPUT_FILE"
   Hard links:            1
   MIME type:             text/plain
   SHA-256:               fc5cf5531f0b1088cd964d37e56e42c06b4a4725579e15159fe2bc35afb1eadd
-  Last git commit:       a6a8597 2026-07-11 02:21:35 -0400 use podman
+  Last git commit:       94c97e7 2026-08-06 10:29:20 -0400 add claude changes
 
 --- CONTENT ---
 name: Rocq Proof Verification
@@ -912,7 +908,7 @@ jobs:
   Hard links:            1
   MIME type:             text/plain
   SHA-256:               426b41a2d54158d7696a5e4ffd5e664e8b34567319c5eef74f48c9ecbe475450
-  Last git commit:       
+  Last git commit:       94c97e7 2026-08-06 10:29:20 -0400 add claude changes
 
 --- CONTENT ---
 # Rocq / Coq build artefacts
@@ -970,7 +966,7 @@ Qed.
   Hard links:            1
   MIME type:             text/plain
   SHA-256:               94e47b537be4f62eff23aff8e6a3d39a65cbd5984568bba0952061e7e30bab3a
-  Last git commit:       8540245 2026-07-11 01:45:49 -0400 update readme
+  Last git commit:       94c97e7 2026-08-06 10:29:20 -0400 add claude changes
 
 --- CONTENT ---
 # Rocq "Hello World" Proof Verification
@@ -1123,7 +1119,7 @@ podman run --rm \
   Hard links:            1
   MIME type:             text/x-shellscript
   SHA-256:               2980a1b2feee3e5f071244bb71c88525a72d5252d79219d244f96ee7ddfc9f26
-  Last git commit:       061ef41 2026-07-11 02:28:51 -0400 update ci
+  Last git commit:       94c97e7 2026-08-06 10:29:20 -0400 add claude changes
 
 --- CONTENT ---
 #!/usr/bin/env bash
@@ -1264,7 +1260,7 @@ fi
   Files dumped   : 7
   Total size     : 25.4 KiB (26065 bytes)
   Output file    : /home/kushal/src/mycoq/hellocoq/docs/llm/dump.txt
-  Completed at   : 2026-08-06T10:29:10-04:00
+  Completed at   : 2026-08-06T10:29:25-04:00
 ################################################################################
 # END OF DUMP
 ################################################################################
