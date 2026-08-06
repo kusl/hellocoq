@@ -1,14 +1,21 @@
-name: Coq Proof Verification
+name: Rocq Proof Verification
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   verify:
     runs-on: ubuntu-latest
+    # ubuntu-latest ships both podman and docker; verify.sh prefers podman.
+    # If podman ever misbehaves on the runner, uncomment the next two lines.
+    # env:
+    #   CONTAINER_ENGINE: docker
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v7
+      - name: Checkout code
+        uses: actions/checkout@v7
 
-    - name: Run verification in Podman/Docker
-      # The ubuntu-latest runner comes with podman pre-installed
-      run: bash run_podman.sh
+      - name: Verify proofs
+        run: bash verify.sh

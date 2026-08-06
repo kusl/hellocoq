@@ -7,7 +7,7 @@
 
 DUMP METADATA
 ═════════════════════════════════════════════════════════════════════════════════
-  Generated at   : 2026-08-06T10:09:39-04:00
+  Generated at   : 2026-08-06T10:29:09-04:00
   Generator      : export.sh
   Host           : fedora
   User           : kushal
@@ -17,18 +17,22 @@ REPOSITORY METADATA
 ═════════════════════════════════════════════════════════════════════════════════
   Repository root: /home/kushal/src/mycoq/hellocoq
   Branch         : main
-  Commit (full)  : 061ef417d73e5a929a9814a00c311f6700c224de
-  Commit (short) : 061ef41
-  Commit date    : 2026-07-11 02:28:51 -0400
-  Commit message : update ci
+  Commit (full)  : 5f2adc60409508a435c255e4b9f828e1c9d9d26c
+  Commit (short) : 5f2adc6
+  Commit date    : 2026-08-06 10:09:49 -0400
+  Commit message : run dump
   Remote origin  : git@github.com:kusl/hellocoq.git
-  Files included : 6
+  Files included : 7
   Excluded path  : docs/llm/
   Excluded files : yarn.lock, .pnp.cjs, .pnp.loader.mjs
 
 GIT WORKING TREE STATUS (first 20 lines)
 ═════════════════════════════════════════════════════════════════════════════════
-  (clean — no uncommitted changes)
+ M .github/workflows/ci.yml
+ M README.md
+ M verify.sh
+?? docs/llm/vendor/
+?? gitignore
 
 ################################################################################
 # FILE: export.sh  [THIS SCRIPT — included for full context]
@@ -430,7 +434,7 @@ FOOTER
 mv -f "$TMP_FILE" "$OUTPUT_FILE"
 
 ################################################################################
-# FILE TREE  (all 6 included files)
+# FILE TREE  (all 7 included files)
 ################################################################################
 .
 .
@@ -438,6 +442,7 @@ mv -f "$TMP_FILE" "$OUTPUT_FILE"
 ├── .github
 │   └── workflows
 │       └── ci.yml
+├── gitignore
 ├── hello.v
 ├── README.md
 ├── run_podman.sh
@@ -857,31 +862,70 @@ mv -f "$TMP_FILE" "$OUTPUT_FILE"
   File name:             ci.yml
   Relative path:         .github/workflows/ci.yml
   Absolute path:         /home/kushal/src/mycoq/hellocoq/.github/workflows/ci.yml
-  Size:                  310 B (310 bytes)
-  Last modified:         2026-07-11 02:21:20.550844884 -0400
+  Size:                  472 B (472 bytes)
+  Last modified:         2026-08-06 10:28:08.406513335 -0400
   Permissions:           -rw-r--r--
   Owner:                 kushal:kushal
-  Inode:                 20561002
+  Inode:                 33606007
   Hard links:            1
   MIME type:             text/plain
-  SHA-256:               70db80c538b303b873baefbbfda23e99bd6b908ca2f3456bf491aa6819c3e379
+  SHA-256:               fc5cf5531f0b1088cd964d37e56e42c06b4a4725579e15159fe2bc35afb1eadd
   Last git commit:       a6a8597 2026-07-11 02:21:35 -0400 use podman
 
 --- CONTENT ---
-name: Coq Proof Verification
+name: Rocq Proof Verification
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   verify:
     runs-on: ubuntu-latest
+    # ubuntu-latest ships both podman and docker; verify.sh prefers podman.
+    # If podman ever misbehaves on the runner, uncomment the next two lines.
+    # env:
+    #   CONTAINER_ENGINE: docker
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v7
+      - name: Checkout code
+        uses: actions/checkout@v7
 
-    - name: Run verification in Podman/Docker
-      # The ubuntu-latest runner comes with podman pre-installed
-      run: bash run_podman.sh
+      - name: Verify proofs
+        run: bash verify.sh
+
+
+################################################################################
+# FILE: gitignore
+################################################################################
+
+--- METADATA ---
+  File name:             gitignore
+  Relative path:         gitignore
+  Absolute path:         /home/kushal/src/mycoq/hellocoq/gitignore
+  Size:                  126 B (126 bytes)
+  Last modified:         2026-08-06 10:28:09.117519906 -0400
+  Permissions:           -rw-r--r--
+  Owner:                 kushal:kushal
+  Inode:                 33606013
+  Hard links:            1
+  MIME type:             text/plain
+  SHA-256:               426b41a2d54158d7696a5e4ffd5e664e8b34567319c5eef74f48c9ecbe475450
+  Last git commit:       
+
+--- CONTENT ---
+# Rocq / Coq build artefacts
+*.vo
+*.vok
+*.vos
+*.glob
+.*.aux
+.lia.cache
+.nia.cache
+.coq-native/
+Makefile.coq
+Makefile.coq.conf
 
 
 ################################################################################
@@ -893,10 +937,10 @@ jobs:
   Relative path:         hello.v
   Absolute path:         /home/kushal/src/mycoq/hellocoq/hello.v
   Size:                  132 B (132 bytes)
-  Last modified:         2026-07-11 01:40:46.353753062 -0400
+  Last modified:         2026-08-06 10:28:10.249530368 -0400
   Permissions:           -rw-r--r--
   Owner:                 kushal:kushal
-  Inode:                 20560920
+  Inode:                 33606034
   Hard links:            1
   MIME type:             text/plain
   SHA-256:               f60f7fe457a307a0f996a4c6c09bf1b21e16f48b773519f1ef12ed8f74d755f5
@@ -918,57 +962,112 @@ Qed.
   File name:             README.md
   Relative path:         README.md
   Absolute path:         /home/kushal/src/mycoq/hellocoq/README.md
-  Size:                  1.6 KiB (1685 bytes)
-  Last modified:         2026-07-11 01:45:38.798711915 -0400
+  Size:                  2.9 KiB (2975 bytes)
+  Last modified:         2026-08-06 10:28:09.717525451 -0400
   Permissions:           -rw-r--r--
   Owner:                 kushal:kushal
-  Inode:                 20561422
+  Inode:                 33606018
   Hard links:            1
   MIME type:             text/plain
-  SHA-256:               10c2e08d6d5b239b0b8f121cdec8973af971b3181d5e919ddc223dd1f9736450
+  SHA-256:               94e47b537be4f62eff23aff8e6a3d39a65cbd5984568bba0952061e7e30bab3a
   Last git commit:       8540245 2026-07-11 01:45:49 -0400 update readme
 
 --- CONTENT ---
-# 🚀 Coq "Hello World" Proof Verification
+# Rocq "Hello World" Proof Verification
 
-A lightweight, automated project designed to demonstrate formal proof verification using **Coq** and **GitHub Actions**. 
+A minimal, automated project that machine-checks a formal proof with the
+[Rocq Prover](https://rocq-prover.org/) (formerly Coq) on every push.
 
-This project establishes an absolute, mathematically checked proof for a foundational proposition ($A \land B \implies B \land A$) and runs the validation automatically on every commit using a decoupled shell script and a CI runner.
-
----
-
-## 🛠️ Project Structure
-
-* `hello.v` — The Coq source file containing our logical proposition and formal proof.
-* `verify.sh` — A localized bash script that invokes the Coq compiler (`coqc`) to check the proofs.
-* `.github/workflows/ci.yml` — A streamlined GitHub Actions pipeline that mirrors the local verification process inside an isolated environment.
+The proposition proved is commutativity of conjunction: $A \land B \implies B \land A$.
 
 ---
 
-## 💻 How to Run Locally
+## Project structure
 
-### Option 1: Native Coq
-If you have Coq installed natively on your machine, simply make the script executable and run it:
+| File | Purpose |
+| --- | --- |
+| `hello.v` | The Rocq source: the proposition and its proof. |
+| `verify.sh` | The whole build. Runs the checks inside the official Rocq container, or natively with `--native`. |
+| `.github/workflows/ci.yml` | Checkout, then `bash verify.sh`. That's it. |
+| `export.sh` | Unrelated helper: dumps the repo to `docs/llm/dump.txt` for LLM context. |
+
+CI runs the same script you run locally, so there is no second copy of the
+build logic to keep in sync.
+
+---
+
+## Running it
+
 ```bash
-chmod +x verify.sh
-./verify.sh
+./verify.sh              # pull the latest Rocq image and verify (podman, else docker)
+./verify.sh --no-pull    # reuse the image already on disk
+./verify.sh --native     # use the rocq (or coqc) already installed on your PATH
+./verify.sh --help
 ```
 
-### Option 2: Docker Mirror (Matches CI exactly)
+The script resolves its own location, so it works from any working directory.
 
-If you don't have Coq installed locally, you can mirror the exact GitHub Actions execution environment using Docker:
+Useful overrides:
+
 ```bash
-docker run --rm -v "$(pwd):/workspace" -w /workspace coqorg/coq:latest ./verify.sh
+ROCQ_IMAGE=docker.io/rocq/rocq-prover:9.2 ./verify.sh   # pin a version
+CONTAINER_ENGINE=docker ./verify.sh                     # force an engine
 ```
 
-🤖 AI Disclosure & Collaboration
+Sources are copied into a scratch directory before compiling, so `.vo`,
+`.glob` and `.aux` files never land in your worktree.
 
-This project was built in collaboration with Gemini (Google AI).
+### Poking around interactively
 
-Gemini assisted in:
-    Formulating and explaining the formal logic syntax for the Coq proof ecosystem.
-    Designing a decoupled CI workflow architecture (separating runner definitions from runtime execution scripts).
-    Structuring the localized verification patterns to bridge the gap between personal environments and automated pipelines.
+```bash
+podman run --rm -it \
+  --security-opt label=disable \
+  --userns=keep-id \
+  -v "$PWD":/work -w /work \
+  docker.io/rocq/rocq-prover:latest bash
+```
+
+`--userns=keep-id` maps your host UID onto the container's `rocq` user so you
+can actually write files in `/work`. Inside, use `rocq compile hello.v` or
+`rocq repl`.
+
+---
+
+## A note on `coqc` vs `rocq compile`
+
+Rocq 9.0 renamed the command-line tools. The `rocq/rocq-prover` images install
+`rocq-core` but deliberately skip the transitional `coq-core` package, so
+**there is no `coqc` binary in the image**:
+
+| Coq ≤ 8.20 | Rocq ≥ 9.0 |
+| --- | --- |
+| `coqc f.v` | `rocq compile f.v` |
+| `coqtop` | `rocq repl` |
+| `coqdep` | `rocq dep` |
+| `coq_makefile` | `rocq makefile` |
+| `coqchk` | `rocq check` |
+
+`verify.sh` prefers `rocq` and falls back to `coqc`, so it also works against
+an older native Coq install.
+
+The image's `ENTRYPOINT` is `opam exec --`, which already puts the opam switch
+on `PATH` — no manual `PATH` surgery is needed.
+
+---
+
+## Scaling past one file
+
+`verify.sh` compiles every `.v` file it finds, in alphabetical order. Once
+files start depending on each other, add a `_CoqProject` and switch the loop to
+`rocq makefile -f _CoqProject -o Makefile.coq && make -f Makefile.coq`.
+
+---
+
+## AI disclosure
+
+Built in collaboration with Gemini (Google AI) for the original Coq proof and
+CI scaffolding, and Claude (Anthropic) for the migration to the Rocq 9.x
+toolchain and the single-entry-point build script.
 
 
 ################################################################################
@@ -1016,55 +1115,156 @@ podman run --rm \
   File name:             verify.sh
   Relative path:         verify.sh
   Absolute path:         /home/kushal/src/mycoq/hellocoq/verify.sh
-  Size:                  879 B (879 bytes)
-  Last modified:         2026-07-11 02:28:16.620001734 -0400
-  Permissions:           -rwxr-xr-x
+  Size:                  4.5 KiB (4641 bytes)
+  Last modified:         2026-08-06 10:28:07.487504840 -0400
+  Permissions:           -rw-r--r--
   Owner:                 kushal:kushal
-  Inode:                 20560957
+  Inode:                 33606002
   Hard links:            1
   MIME type:             text/x-shellscript
-  SHA-256:               7de1bd2298f99980150cfdcfd6646e8083d4645b884d0e3fa3b1925355292e17
+  SHA-256:               2980a1b2feee3e5f071244bb71c88525a72d5252d79219d244f96ee7ddfc9f26
   Last git commit:       061ef41 2026-07-11 02:28:51 -0400 update ci
 
 --- CONTENT ---
 #!/usr/bin/env bash
-set -e
+# =============================================================================
+# verify.sh — machine-check every Rocq (.v) file in this repository.
+#
+#   ./verify.sh              run the checks inside the official Rocq container
+#                            (podman if present, else docker)
+#   ./verify.sh --no-pull    reuse the image already on disk, skip the pull
+#   ./verify.sh --native     use the rocq / coqc already installed on $PATH
+#
+# CI runs the exact same command, so your laptop and the GitHub runner execute
+# byte-for-byte identical steps.
+#
+# Overrides: ROCQ_IMAGE=...   CONTAINER_ENGINE=podman|docker
+# =============================================================================
+set -euo pipefail
 
-echo "========================================="
-echo " Starting Coq Proof Verification..."
-echo "========================================="
+SELF="$(readlink -f "${BASH_SOURCE[0]}")"
+REPO_ROOT="$(dirname "$SELF")"
+SELF_NAME="$(basename "$SELF")"
 
-# 💡 FIX: Manually find and inject the container's compiler paths into $PATH
-# This bypasses opam's user/root restrictions completely
-for opam_bin in /home/rocq/.opam/*/bin /home/rocq/.opam/*/*/bin; do
-    if [ -d "$opam_bin" ]; then
-        export PATH="$opam_bin:$PATH"
-    fi
+IMAGE="${ROCQ_IMAGE:-docker.io/rocq/rocq-prover:latest}"
+NATIVE=0
+PULL=1
+
+for arg in "$@"; do
+    case "$arg" in
+        --native)   NATIVE=1 ;;
+        --no-pull)  PULL=0 ;;
+        -h|--help)  awk 'NR>1 && /^#/ {sub(/^# ?/,""); print; next} NR>1 {exit}' "$SELF"; exit 0 ;;
+        *)          echo "verify.sh: unknown option '$arg' (try --help)" >&2; exit 2 ;;
+    esac
 done
 
-# 1. Check if coqc is available
-if ! command -v coqc &> /dev/null; then
-    echo "Error: coqc (Coq Compiler) is not installed or not in your PATH."
-    echo "Current PATH search space: $PATH"
-    exit 1
+BUILD_DIR=""
+cleanup() { if [[ -n "$BUILD_DIR" ]]; then rm -rf "$BUILD_DIR"; fi; }
+trap cleanup EXIT
+
+# -----------------------------------------------------------------------------
+# The actual verification. Runs natively, or inside the container (same code).
+# -----------------------------------------------------------------------------
+run_checks() {
+    local compiler
+    if command -v rocq >/dev/null 2>&1; then
+        compiler=rocq            # Rocq >= 9.0 : `rocq compile foo.v`
+    elif command -v coqc >/dev/null 2>&1; then
+        compiler=coqc            # Coq  <= 8.20: `coqc foo.v`
+    else
+        echo "verify.sh: neither 'rocq' nor 'coqc' is on \$PATH" >&2
+        echo "           PATH=$PATH" >&2
+        exit 1
+    fi
+
+    local -a sources=()
+    local src rel
+    while IFS= read -r -d '' src; do
+        sources+=("${src#"$REPO_ROOT"/}")
+    done < <(find "$REPO_ROOT" -type f -name '*.v' -not -path '*/.git/*' -print0 | sort -z)
+
+    if (( ${#sources[@]} == 0 )); then
+        echo "verify.sh: no .v files found under $REPO_ROOT" >&2
+        exit 1
+    fi
+
+    echo "========================================="
+    echo " Rocq proof verification"
+    echo " compiler : $("$compiler" --version 2>/dev/null | head -n1)"
+    echo " sources  : ${#sources[@]} file(s) under $REPO_ROOT"
+    echo "========================================="
+
+    # Compile a scratch copy rather than the worktree itself: the repo is
+    # mounted read-only in the container (a rootless container cannot write
+    # there anyway), and this keeps .vo/.glob/.aux droppings out of your repo.
+    BUILD_DIR="$(mktemp -d)"
+    for rel in "${sources[@]}"; do
+        mkdir -p "$BUILD_DIR/$(dirname "$rel")"
+        cp "$REPO_ROOT/$rel" "$BUILD_DIR/$rel"
+    done
+    [[ -f "$REPO_ROOT/_CoqProject" ]] && cp "$REPO_ROOT/_CoqProject" "$BUILD_DIR/"
+
+    cd "$BUILD_DIR"
+    for rel in "${sources[@]}"; do
+        echo "  -> $rel"
+        if [[ $compiler == rocq ]]; then
+            rocq compile "$rel"
+        else
+            coqc "$rel"
+        fi
+    done
+
+    echo "========================================="
+    echo " Success: all proofs verified"
+    echo "========================================="
+}
+
+# -----------------------------------------------------------------------------
+# Re-run this same script inside the official Rocq image.
+# -----------------------------------------------------------------------------
+run_in_container() {
+    local engine="${CONTAINER_ENGINE:-}"
+    if [[ -z "$engine" ]]; then
+        if   command -v podman >/dev/null 2>&1; then engine=podman
+        elif command -v docker >/dev/null 2>&1; then engine=docker
+        else
+            echo "verify.sh: no podman or docker found." >&2
+            echo "           Install one, or run '$SELF --native'." >&2
+            exit 1
+        fi
+    fi
+
+    if (( PULL )); then
+        echo "Pulling $IMAGE with $engine ..."
+        "$engine" pull "$IMAGE"
+    fi
+
+    # The image's ENTRYPOINT is `opam exec --`, so the opam switch (and the
+    # rocq binary) is already on PATH. Nothing to set up by hand.
+    exec "$engine" run --rm \
+        --security-opt label=disable \
+        -e ROCQ_IN_CONTAINER=1 \
+        -v "$REPO_ROOT":/workspace:ro \
+        -w /workspace \
+        "$IMAGE" \
+        bash "/workspace/$SELF_NAME"
+}
+
+if (( NATIVE )) || [[ "${ROCQ_IN_CONTAINER:-0}" == 1 ]]; then
+    run_checks
+else
+    run_in_container
 fi
-
-# 2. Compile the Coq file
-echo "Compiling hello.v..."
-coqc hello.v
-
-echo "========================================="
-echo " Success: All proofs verified by Coq! ✅"
-echo "========================================="
 
 
 ################################################################################
 # DUMP SUMMARY
 ################################################################################
-  Files dumped   : 6
-  Total size     : 20.2 KiB (20725 bytes)
+  Files dumped   : 7
+  Total size     : 25.4 KiB (26065 bytes)
   Output file    : /home/kushal/src/mycoq/hellocoq/docs/llm/dump.txt
-  Completed at   : 2026-08-06T10:09:39-04:00
+  Completed at   : 2026-08-06T10:29:10-04:00
 ################################################################################
 # END OF DUMP
 ################################################################################

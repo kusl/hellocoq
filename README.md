@@ -1,40 +1,95 @@
-# 🚀 Coq "Hello World" Proof Verification
+# Rocq "Hello World" Proof Verification
 
-A lightweight, automated project designed to demonstrate formal proof verification using **Coq** and **GitHub Actions**. 
+A minimal, automated project that machine-checks a formal proof with the
+[Rocq Prover](https://rocq-prover.org/) (formerly Coq) on every push.
 
-This project establishes an absolute, mathematically checked proof for a foundational proposition ($A \land B \implies B \land A$) and runs the validation automatically on every commit using a decoupled shell script and a CI runner.
-
----
-
-## 🛠️ Project Structure
-
-* `hello.v` — The Coq source file containing our logical proposition and formal proof.
-* `verify.sh` — A localized bash script that invokes the Coq compiler (`coqc`) to check the proofs.
-* `.github/workflows/ci.yml` — A streamlined GitHub Actions pipeline that mirrors the local verification process inside an isolated environment.
+The proposition proved is commutativity of conjunction: $A \land B \implies B \land A$.
 
 ---
 
-## 💻 How to Run Locally
+## Project structure
 
-### Option 1: Native Coq
-If you have Coq installed natively on your machine, simply make the script executable and run it:
+| File | Purpose |
+| --- | --- |
+| `hello.v` | The Rocq source: the proposition and its proof. |
+| `verify.sh` | The whole build. Runs the checks inside the official Rocq container, or natively with `--native`. |
+| `.github/workflows/ci.yml` | Checkout, then `bash verify.sh`. That's it. |
+| `export.sh` | Unrelated helper: dumps the repo to `docs/llm/dump.txt` for LLM context. |
+
+CI runs the same script you run locally, so there is no second copy of the
+build logic to keep in sync.
+
+---
+
+## Running it
+
 ```bash
-chmod +x verify.sh
-./verify.sh
+./verify.sh              # pull the latest Rocq image and verify (podman, else docker)
+./verify.sh --no-pull    # reuse the image already on disk
+./verify.sh --native     # use the rocq (or coqc) already installed on your PATH
+./verify.sh --help
 ```
 
-### Option 2: Docker Mirror (Matches CI exactly)
+The script resolves its own location, so it works from any working directory.
 
-If you don't have Coq installed locally, you can mirror the exact GitHub Actions execution environment using Docker:
+Useful overrides:
+
 ```bash
-docker run --rm -v "$(pwd):/workspace" -w /workspace coqorg/coq:latest ./verify.sh
+ROCQ_IMAGE=docker.io/rocq/rocq-prover:9.2 ./verify.sh   # pin a version
+CONTAINER_ENGINE=docker ./verify.sh                     # force an engine
 ```
 
-🤖 AI Disclosure & Collaboration
+Sources are copied into a scratch directory before compiling, so `.vo`,
+`.glob` and `.aux` files never land in your worktree.
 
-This project was built in collaboration with Gemini (Google AI).
+### Poking around interactively
 
-Gemini assisted in:
-    Formulating and explaining the formal logic syntax for the Coq proof ecosystem.
-    Designing a decoupled CI workflow architecture (separating runner definitions from runtime execution scripts).
-    Structuring the localized verification patterns to bridge the gap between personal environments and automated pipelines.
+```bash
+podman run --rm -it \
+  --security-opt label=disable \
+  --userns=keep-id \
+  -v "$PWD":/work -w /work \
+  docker.io/rocq/rocq-prover:latest bash
+```
+
+`--userns=keep-id` maps your host UID onto the container's `rocq` user so you
+can actually write files in `/work`. Inside, use `rocq compile hello.v` or
+`rocq repl`.
+
+---
+
+## A note on `coqc` vs `rocq compile`
+
+Rocq 9.0 renamed the command-line tools. The `rocq/rocq-prover` images install
+`rocq-core` but deliberately skip the transitional `coq-core` package, so
+**there is no `coqc` binary in the image**:
+
+| Coq ≤ 8.20 | Rocq ≥ 9.0 |
+| --- | --- |
+| `coqc f.v` | `rocq compile f.v` |
+| `coqtop` | `rocq repl` |
+| `coqdep` | `rocq dep` |
+| `coq_makefile` | `rocq makefile` |
+| `coqchk` | `rocq check` |
+
+`verify.sh` prefers `rocq` and falls back to `coqc`, so it also works against
+an older native Coq install.
+
+The image's `ENTRYPOINT` is `opam exec --`, which already puts the opam switch
+on `PATH` — no manual `PATH` surgery is needed.
+
+---
+
+## Scaling past one file
+
+`verify.sh` compiles every `.v` file it finds, in alphabetical order. Once
+files start depending on each other, add a `_CoqProject` and switch the loop to
+`rocq makefile -f _CoqProject -o Makefile.coq && make -f Makefile.coq`.
+
+---
+
+## AI disclosure
+
+Built in collaboration with Gemini (Google AI) for the original Coq proof and
+CI scaffolding, and Claude (Anthropic) for the migration to the Rocq 9.x
+toolchain and the single-entry-point build script.
